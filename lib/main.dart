@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:req/Controller/Api%20Service.dart';
+import 'package:req/Controller/cartprovider.dart';
+import 'package:req/Controller/navigationprovider.dart';
+import 'package:req/View/Customer.dart';
 import 'package:req/View/HomeScreen.dart';
 import 'package:req/View/productsscreen.dart';
 
@@ -13,10 +16,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
         providers: [
-          // Assuming ViewController is your state management provider
           ChangeNotifierProvider(create: (_) => ProductProvider()),
-
-          // Add more providers if needed
+          ChangeNotifierProvider(create: (_) => ProductController()),
+          ChangeNotifierProvider(create: (_) => Cart()),
         ],
         child: MaterialApp(
             debugShowCheckedModeBanner: false,
@@ -24,6 +26,6 @@ class MyApp extends StatelessWidget {
             theme: ThemeData(
               primarySwatch: Colors.blue,
             ),
-            home: Product()));
+            home: ProductListView()));
   }
 }

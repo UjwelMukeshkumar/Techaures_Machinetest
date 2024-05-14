@@ -1,38 +1,22 @@
-import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
-
+import 'package:http/http.dart' as http;
+import 'package:flutter/material.dart';
 import 'package:req/Models/viewmodel.dart';
 
-class ProductProvider with ChangeNotifier {
-  List<Product> _products = [];
-
-  List<Product> get products => _products;
-
-  get selectedIndex => null;
+class ProductController extends ChangeNotifier {
+  List<Products> products = [];
 
   Future<void> fetchProducts() async {
-    try {
-      final response =
-          await http.get(Uri.parse('http://143.198.61.94:8000/api/products/'));
-
-      if (response.statusCode == 200) {
-        List<Product> fetchedProducts = [];
-        var jsonResponse = json.decode(response.body);
-        for (var item in jsonResponse['data']) {
-          fetchedProducts.add(Product.fromJson(item));
-        }
-        _products = fetchedProducts;
-        print('Products fetched: $_products'); // Debugging
-        notifyListeners();
-      } else {
-        throw Exception('Failed to load products: ${response.statusCode}');
-      }
-    } catch (error) {
-      print('Error fetching products: $error'); // Debugging
-      throw Exception('Failed to load products: $error');
+    final response =
+        await http.get(Uri.parse('http://143.198.61.94:8000/api/products/'));
+    if (response.statusCode == 200) {
+      final jsonData = json.decode(response.body);
+      products = (jsonData['data'] as List)
+          .map((item) => Products.fromJson(item))
+          .toList();
+      notifyListeners();
+    } else {
+      throw Exception('Failed to load products');
     }
   }
-
-  void changeSelectedIndex(int index) {}
 }

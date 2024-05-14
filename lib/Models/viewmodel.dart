@@ -1,4 +1,4 @@
-class Product {
+class Products {
   final int id;
   final String name;
   final String image;
@@ -9,7 +9,7 @@ class Product {
   final String modifiedTime;
   final bool flag;
 
-  Product({
+  Products({
     required this.id,
     required this.name,
     required this.image,
@@ -21,8 +21,8 @@ class Product {
     required this.flag,
   });
 
-  factory Product.fromJson(Map<String, dynamic> json) {
-    return Product(
+  factory Products.fromJson(Map<String, dynamic> json) {
+    return Products(
       id: json['id'],
       name: json['name'],
       image: json['image'],

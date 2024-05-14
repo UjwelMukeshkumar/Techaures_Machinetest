@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:req/Controller/Api%20Service.dart';
+import 'package:req/Controller/navigationprovider.dart';
+import 'package:req/Models/viewmodel.dart';
+import 'package:req/View/Customer.dart';
+import 'package:req/View/productsscreen.dart';
 import 'package:req/color.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
@@ -103,55 +107,6 @@ class ProductListView extends StatelessWidget {
                       ),
                     )
                   ],
-
-                  // child: Expanded(
-                  //   child: productProvider.products.isEmpty
-                  //       ? CircularProgressIndicator()
-                  //       : GridView.builder(
-                  //           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  //             crossAxisCount: 2, // Number of columns in the grid
-                  //             crossAxisSpacing: 10.0, // Spacing between columns
-                  //             mainAxisSpacing: 10.0, // Spacing between rows
-                  //             childAspectRatio:
-                  //                 0.75, // Aspect ratio (width / height) of each item
-                  //           ),
-                  //           itemCount: productProvider.products.length,
-                  //           itemBuilder: (context, index) {
-                  //             return GridTile(
-                  //               child: Card(
-                  //                 child: Column(
-                  //                   crossAxisAlignment: CrossAxisAlignment.start,
-                  //                   children: [
-                  //                     Expanded(
-                  //                       child: Image.network(
-                  //                         productProvider.products[index].image,
-                  //                         fit: BoxFit.cover,
-                  //                         errorBuilder: (context, error, stackTrace) {
-                  //                           return Placeholder(); // Placeholder widget or error message
-                  //                         },
-                  //                       ),
-                  //                     ),
-                  //                     Padding(
-                  //                       padding: const EdgeInsets.all(8.0),
-                  //                       child: Text(
-                  //                         productProvider.products[index].name,
-                  //                         style: TextStyle(fontWeight: FontWeight.bold),
-                  //                       ),
-                  //                     ),
-                  //                     Padding(
-                  //                       padding:
-                  //                           const EdgeInsets.symmetric(horizontal: 8.0),
-                  //                       child: Text(
-                  //                         'Price: \$${productProvider.products[index].price}',
-                  //                       ),
-                  //                     ),
-                  //                   ],
-                  //                 ),
-                  //               ),
-                  //             );
-                  //           },
-                  //         ),
-                  // ),
                 ),
               ),
               Padding(
@@ -431,18 +386,44 @@ class ProductListView extends StatelessWidget {
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.search),
-                  label: 'Customers',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.production_quantity_limits_sharp),
                   label: 'Products',
                 ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.man_2),
+                  label: 'Customers',
+                ),
               ],
-              currentIndex: provider.selectedIndex ??
-                  0, // Provide a default value if selectedIndex is null
               selectedItemColor: Colors.blue,
+              currentIndex: provider.selectedIndex ?? 0,
               onTap: (int index) {
-                provider.changeSelectedIndex(index);
+                // Navigate to corresponding pages based on index
+                switch (index) {
+                  case 0:
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              ProductListView()), // Replace HomePage with your actual home page
+                    );
+                    break;
+                  case 1:
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              Product()), // Replace CustomersPage with your actual customers page
+                    );
+                    break;
+                  case 2:
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => CustomerListScreen()),
+                    );
+                    break;
+                  default:
+                    break;
+                }
               },
             );
           },
