@@ -18,7 +18,7 @@ class AppColors {
   static Color color = Color.fromRGBO(0, 0, 0, 0.1);
   //static Color backgroud = Color(0xFFC9D2DF);
   static Color backgroundColor =
-      Color.fromARGB(255, 204, 202, 202); // Color(0xFFC9D2DF);
+      Color.fromARGB(255, 197, 244, 234); // Color(0xFFC9D2DF);
   static Color login = Color(0xFFF2F2F2);
   static Color tab = const Color(0xFFC9D2DF);
   static Color linecolor = Color(0xFF56B7E1);

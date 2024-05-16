@@ -61,6 +61,18 @@ class Cart extends ChangeNotifier {
     log("add product  !!!!!!!!!!!!!!!");
   }
 
+  int countOf(int id) {
+    // Count the occurrences of the item with the specified ID
+    return _list.where((item) => item.id == id).length;
+  }
+
+  CartProduct? getItem(int id) {
+    // Find the CartProduct with the specified ID
+    return _list.firstWhere(
+      (item) => item.id == id,
+    );
+  }
+
   void increment(CartProduct product) {
     product.increase();
     notifyListeners();
@@ -114,11 +126,11 @@ class CartProduct {
       };
   void increase() {
     qty++;
-    //  qty = qty + 1;
+    qty = qty + 1;
   }
 
   void decrease() {
     qty--;
-    //qty = qty - 1;
+    qty = qty - 1;
   }
 }

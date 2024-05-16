@@ -30,7 +30,7 @@ class Navigation extends StatelessWidget {
             onTap: (index) {
               navigationProvider.setIndex(index);
             },
-            items: [
+            items: const [
               BottomNavigationBarItem(
                 icon: Icon(Icons.home),
                 label: 'Home',
@@ -53,19 +53,19 @@ class Navigation extends StatelessWidget {
   Widget _buildPage(int selectedIndex) {
     switch (selectedIndex) {
       case 0:
-        return Center(
+        return const Center(
           child: Text('Home Page'),
         );
       case 1:
-        return Center(
+        return const Center(
           child: Text('Product Page'),
         );
       case 2:
-        return Center(
+        return const Center(
           child: Text('Customer Page'),
         );
       default:
-        return Center(
+        return const Center(
           child: Text('Unknown Page'),
         );
     }

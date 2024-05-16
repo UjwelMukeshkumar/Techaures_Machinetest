@@ -53,23 +53,21 @@ class CartDatabaseHelper {
   static final columnName = 'name';
   static final columnPrice = 'price';
   static final columnQuantity = 'quantity';
-  static final columnImageUrl = 'imageUrl';
+  static final columnImageUrl = 'image';
 
   // make this a singleton class
   CartDatabaseHelper._privateConstructor();
   static final CartDatabaseHelper instance =
       CartDatabaseHelper._privateConstructor();
 
-  // only have a single app-wide reference to the database
   static Database? _database;
   Future<Database> get database async {
     if (_database != null) return _database!;
-    // lazily instantiate the db the first time it is accessed
+
     _database = await _initDatabase();
     return _database!;
   }
 
-  // this opens the database (and creates it if it doesn't exist)
   _initDatabase() async {
     String path = join(await getDatabasesPath(), _databaseName);
     return await openDatabase(path,
@@ -88,8 +86,6 @@ class CartDatabaseHelper {
       )
       ''');
   }
-
-  // Helper methods
 
   Future<int> insert(Map<String, dynamic> row) async {
     Database db = await instance.database;
