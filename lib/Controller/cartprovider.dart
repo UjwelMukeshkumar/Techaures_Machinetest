@@ -33,7 +33,10 @@ class Cart extends ChangeNotifier {
     var total = 0.0;
 
     for (var item in _list) {
-      total = total + (item.price * item.qty);
+      if (item.qty > 0) {
+        // Check if quantity is greater than 0
+        total += item.price * item.qty;
+      }
     }
     return total;
   }
@@ -79,8 +82,11 @@ class Cart extends ChangeNotifier {
   }
 
   void reduceByOne(CartProduct product) {
-    product.decrease();
-    notifyListeners();
+    if (product.qty > 0) {
+      // Check if quantity is greater than 0
+      product.decrease();
+      notifyListeners();
+    }
   }
 
   void removeItem(CartProduct product) {
@@ -126,7 +132,7 @@ class CartProduct {
       };
   void increase() {
     qty++;
-    qty = qty + 1;
+    qty = qty++;
   }
 
   void decrease() {

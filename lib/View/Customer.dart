@@ -68,28 +68,50 @@ class _CustomerListScreenState extends State<CustomerListScreen> {
       String pincode,
       String country,
       String state) async {
-    final response = await http.post(
-      Uri.parse('http://143.198.61.94:8000/api/customers/'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(<String, dynamic>{
-        'name': name,
-        'profile_pic': profilePic,
-        'mobile_number': mobileNumber,
-        'email': email,
-        'street': street,
-        'street_two': streetTwo,
-        'city': city,
-        'pincode': pincode,
-        'country': country,
-        'state': state,
-      }),
-    );
-    if (response.statusCode == 200) {
-      fetchCustomers();
-      Navigator.pop(context);
-    } else {
+    try {
+      final response = await http.post(
+        Uri.parse('http://143.198.61.94:8000/api/customers/'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, dynamic>{
+          'name': name,
+          'profile_pic': profilePic,
+          'mobile_number': mobileNumber,
+          'email': email,
+          'street': street,
+          'street_two': streetTwo,
+          'city': city,
+          'pincode': pincode,
+          'country': country,
+          'state': state,
+        }),
+      );
+      if (response.statusCode == 200) {
+        final responseData = json.decode(response.body);
+        if (responseData['error_code'] == 0) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Customer created successfully'),
+              backgroundColor: Colors.green,
+            ),
+          );
+          fetchCustomers();
+          Navigator.pop(context);
+        } else {
+          throw Exception('Failed to create customer');
+        }
+      } else {
+        throw Exception('Failed to create customer');
+      }
+    } catch (error) {
+      print('Error: $error');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Failed to create customer'),
+          backgroundColor: Colors.red,
+        ),
+      );
       throw Exception('Failed to create customer');
     }
   }
@@ -386,142 +408,167 @@ class _CustomerListScreenState extends State<CustomerListScreen> {
                             '${customer['street'] ?? ''}, ${customer['city'] ?? ''}'),
                       ],
                     ),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IconButton(
-                          icon: Icon(Icons.edit),
-                          iconSize: 10,
-                          onPressed: () {
-                            //dialob box for update the customer
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: const Text('Update Customer'),
-                                  content: SingleChildScrollView(
-                                    child: Column(
-                                      children: [
-                                        TextField(
-                                          controller: nameController,
-                                          decoration: InputDecoration(
-                                            labelText: 'Name',
-                                            hintText: customer['name'] ?? '',
+                    trailing: Positioned(
+                      top: 1,
+                      left: 2,
+                      bottom: 60,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            icon: Icon(Icons.call),
+                            iconSize: 10,
+                            onPressed: () {
+                              // Implement calling functionality
+                            },
+                          ),
+                          IconButton(
+                            icon: Image.asset(
+                              'assets/whatsapp.png',
+                              height: 10,
+                            ), // Replace with your WhatsApp icon
+
+                            onPressed: () {
+                              // Implement WhatsApp functionality
+                            },
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.edit),
+                            iconSize: 10,
+                            onPressed: () {
+                              //dialob box for update the customer
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: const Text('Update Customer'),
+                                    content: SingleChildScrollView(
+                                      child: Column(
+                                        children: [
+                                          TextField(
+                                            controller: nameController,
+                                            decoration: InputDecoration(
+                                              labelText: 'Name',
+                                              hintText: customer['name'] ?? '',
+                                            ),
+                                            onChanged: (value) {},
                                           ),
-                                          onChanged: (value) {},
-                                        ),
-                                        TextField(
-                                          controller: profilePicController,
-                                          decoration: InputDecoration(
-                                            labelText: 'Profile Pic',
-                                            hintText:
-                                                customer['profile_pic'] ?? '',
+                                          TextField(
+                                            controller: profilePicController,
+                                            decoration: InputDecoration(
+                                              labelText: 'Profile Pic',
+                                              hintText:
+                                                  customer['profile_pic'] ?? '',
+                                            ),
+                                            onChanged: (value) {},
                                           ),
-                                          onChanged: (value) {},
-                                        ),
-                                        TextField(
-                                          controller: mobileNumberController,
-                                          decoration: InputDecoration(
-                                            labelText: 'Mobile Number',
-                                            hintText:
-                                                customer['mobile_number'] ?? '',
+                                          TextField(
+                                            controller: mobileNumberController,
+                                            decoration: InputDecoration(
+                                              labelText: 'Mobile Number',
+                                              hintText:
+                                                  customer['mobile_number'] ??
+                                                      '',
+                                            ),
+                                            onChanged: (value) {},
                                           ),
-                                          onChanged: (value) {},
-                                        ),
-                                        TextField(
-                                          controller: emailController,
-                                          decoration: InputDecoration(
-                                            labelText: 'Email',
-                                            hintText: customer['email'] ?? '',
+                                          TextField(
+                                            controller: emailController,
+                                            decoration: InputDecoration(
+                                              labelText: 'Email',
+                                              hintText: customer['email'] ?? '',
+                                            ),
+                                            onChanged: (value) {},
                                           ),
-                                          onChanged: (value) {},
-                                        ),
-                                        TextField(
-                                          controller: streetController,
-                                          decoration: InputDecoration(
-                                            labelText: 'Street',
-                                            hintText: customer['street'] ?? '',
+                                          TextField(
+                                            controller: streetController,
+                                            decoration: InputDecoration(
+                                              labelText: 'Street',
+                                              hintText:
+                                                  customer['street'] ?? '',
+                                            ),
+                                            onChanged: (value) {},
                                           ),
-                                          onChanged: (value) {},
-                                        ),
-                                        TextField(
-                                          controller: streetTwoController,
-                                          decoration: InputDecoration(
-                                            labelText: 'Street Two',
-                                            hintText:
-                                                customer['street_two'] ?? '',
+                                          TextField(
+                                            controller: streetTwoController,
+                                            decoration: InputDecoration(
+                                              labelText: 'Street Two',
+                                              hintText:
+                                                  customer['street_two'] ?? '',
+                                            ),
+                                            onChanged: (value) {},
                                           ),
-                                          onChanged: (value) {},
-                                        ),
-                                        TextField(
-                                          controller: cityController,
-                                          decoration: InputDecoration(
-                                            labelText: 'City',
-                                            hintText: customer['city'] ?? '',
+                                          TextField(
+                                            controller: cityController,
+                                            decoration: InputDecoration(
+                                              labelText: 'City',
+                                              hintText: customer['city'] ?? '',
+                                            ),
+                                            onChanged: (value) {},
                                           ),
-                                          onChanged: (value) {},
-                                        ),
-                                        TextField(
-                                          controller: pincodeController,
-                                          decoration: InputDecoration(
-                                            labelText: 'Pincode',
-                                            hintText: customer['pincode']
-                                                    ?.toString() ??
-                                                '',
+                                          TextField(
+                                            controller: pincodeController,
+                                            decoration: InputDecoration(
+                                              labelText: 'Pincode',
+                                              hintText: customer['pincode']
+                                                      ?.toString() ??
+                                                  '',
+                                            ),
+                                            onChanged: (value) {},
                                           ),
-                                          onChanged: (value) {},
-                                        ),
-                                        TextField(
-                                          controller: countryController,
-                                          decoration: InputDecoration(
-                                            labelText: 'Country',
-                                            hintText: customer['country'] ?? '',
+                                          TextField(
+                                            controller: countryController,
+                                            decoration: InputDecoration(
+                                              labelText: 'Country',
+                                              hintText:
+                                                  customer['country'] ?? '',
+                                            ),
+                                            onChanged: (value) {},
                                           ),
-                                          onChanged: (value) {},
-                                        ),
-                                        TextField(
-                                          controller: stateController,
-                                          decoration: InputDecoration(
-                                            labelText: 'State',
-                                            hintText: customer['state'] ?? '',
+                                          TextField(
+                                            controller: stateController,
+                                            decoration: InputDecoration(
+                                              labelText: 'State',
+                                              hintText: customer['state'] ?? '',
+                                            ),
+                                            onChanged: (value) {},
                                           ),
-                                          onChanged: (value) {},
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: const Text('Cancel'),
-                                    ),
-                                    TextButton(
-                                      onPressed: () {
-                                        updateCustomer(
-                                          customer['id']?.toString() ?? '',
-                                          nameController.text,
-                                          profilePicController.text,
-                                          mobileNumberController.text,
-                                          emailController.text,
-                                          streetController.text,
-                                          streetTwoController.text,
-                                          cityController.text,
-                                          pincodeController.text,
-                                          countryController.text,
-                                          stateController.text,
-                                        );
-                                      },
-                                      child: const Text('Update'),
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                          },
-                        ),
-                      ],
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: const Text('Cancel'),
+                                      ),
+                                      TextButton(
+                                        onPressed: () {
+                                          updateCustomer(
+                                            customer['id']?.toString() ?? '',
+                                            nameController.text,
+                                            profilePicController.text,
+                                            mobileNumberController.text,
+                                            emailController.text,
+                                            streetController.text,
+                                            streetTwoController.text,
+                                            cityController.text,
+                                            pincodeController.text,
+                                            countryController.text,
+                                            stateController.text,
+                                          );
+                                        },
+                                        child: const Text('Update'),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            },
+                          ),
+                        ],
+                      ),
                     ),
                     onTap: () {
                       Navigator.push(
